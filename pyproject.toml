@@ -23,6 +23,7 @@ test_sources = [
 ]
 
 requires = [
+    "onnx==1.17.0"
     "transformers",
     "optimum[onnxruntime]",
 ]
