@@ -11,6 +11,9 @@ author_email = "mail@raphaelkabo.com"
 [tool.briefcase.app.roberta-sentiment-analyzer]
 formal_name = "SwiftSentiment"
 description = "A tool for analyzing CSV files of text data using an LLM."
+long_description = """
+SwiftSentiment is a tool for analyzing CSV files of text data using the Twitter RoBERTa base sentiment model.
+"""
 icon = "icons/icon"
 sources = [
     "src/roberta_sentiment_analyzer",
