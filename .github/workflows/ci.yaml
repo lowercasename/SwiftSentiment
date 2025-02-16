@@ -4,6 +4,8 @@ on:
   push:
     branches:
       - main
+    tags:
+      - "v*.*.*"
 
 # Cancel active CI runs for a PR before starting another run
 concurrency:
@@ -13,7 +15,6 @@ concurrency:
 env:
   FORCE_COLOR: "1"
   PYTHONIOENCODING: utf-8
-
 
 defaults:
   run:
@@ -36,21 +37,21 @@ jobs:
             output-format: "app"
             runs-on: "macos-latest"
 
-          - target: "Ubuntu-24.04"
-            platform: "Linux"
-            output-format: "system"
-            runs-on: "ubuntu-latest"
-            pre-command: "sudo apt -y install socat"
-            briefcase-run-prefix: "xvfb-run"
-            briefcase-args: "--target ubuntu:24.04"
+          # - target: "Ubuntu-24.04"
+          #   platform: "Linux"
+          #   output-format: "system"
+          #   runs-on: "ubuntu-latest"
+          #   pre-command: "sudo apt -y install socat"
+          #   briefcase-run-prefix: "xvfb-run"
+          #   briefcase-args: "--target ubuntu:24.04"
 
-          - target: "Fedora-40"
-            platform: "Linux"
-            output-format: "system"
-            runs-on: "ubuntu-latest"
-            pre-command: "sudo apt -y install socat"
-            briefcase-run-prefix: "xvfb-run"
-            briefcase-args: "--target fedora:40"
+          # - target: "Fedora-40"
+          #   platform: "Linux"
+          #   output-format: "system"
+          #   runs-on: "ubuntu-latest"
+          #   pre-command: "sudo apt -y install socat"
+          #   briefcase-run-prefix: "xvfb-run"
+          #   briefcase-args: "--target fedora:40"
 
     steps:
       - name: Checkout
@@ -112,3 +113,24 @@ jobs:
         with:
           name: Log-Failure-${{ matrix.target }}
           path: logs/*
+
+  release:
+    name: Create Release
+    needs: ci
+    runs-on: ubuntu-latest
+    # Only run on tag pushes
+    if: startsWith(github.ref, 'refs/tags/')
+    permissions:
+      contents: write  # Required for creating releases
+    steps:
+      - name: Download Artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: artifacts
+          
+      - name: Create Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: |
+            artifacts/SwiftSentiment-Windows/**/*
+            artifacts/SwiftSentiment-macOS/**/*
