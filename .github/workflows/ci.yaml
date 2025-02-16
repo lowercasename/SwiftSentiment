@@ -31,16 +31,19 @@ jobs:
         include:
           - target: "Windows-x64"
             output-format: "app"
+            output-platform: "windows"
             runs-on: "windows-latest"
 
           # Apple Silicon
           - target: "macOS-arm64"
             output-format: "app"
+            output-platform: "macOS"
             runs-on: "macos-14"
 
           # Apple Intel
           - target: "macOS-x64"
             output-format: "app"
+            output-platform: "macOS"
             runs-on: "macos-13"
 
           # - target: "Ubuntu-24.04"
@@ -79,7 +82,7 @@ jobs:
         run: |
           ${{ matrix.briefcase-build-prefix }} \
           briefcase build \
-            ${{ matrix.platform || matrix.target }} \
+            ${{ matrix.output-platform }} \
             ${{ matrix.output-format }} \
             --test --no-input --log \
             ${{ matrix.briefcase-args }} \
@@ -99,7 +102,7 @@ jobs:
         run: |
           ${{ matrix.briefcase-package-prefix }} \
           briefcase package \
-            ${{ matrix.platform || matrix.target }} \
+            ${{ matrix.output-platform }} \
             ${{ matrix.output-format }} \
             --update --adhoc-sign --no-input --log \
             ${{ matrix.briefcase-args }} \
