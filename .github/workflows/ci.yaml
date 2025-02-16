@@ -106,7 +106,8 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: SwiftSentiment-${{ matrix.target }}
-          path: dist
+          path: |
+            dist/*${{ matrix.target == 'Windows' && '.msi' || '.dmg' }}
           if-no-files-found: error
 
       - name: Upload Log
@@ -134,5 +135,5 @@ jobs:
         uses: softprops/action-gh-release@v2
         with:
           files: |
-            artifacts/SwiftSentiment-Windows/**/*
-            artifacts/SwiftSentiment-macOS/**/*
+            artifacts/SwiftSentiment-Windows/**/*.msi
+            artifacts/SwiftSentiment-macOS/**/*.dmg
