@@ -9,6 +9,12 @@ The quantized model is included in the repository and the generated apps,
 so you don't need to download it separately. The tool does not require an
 internet connection and does not send any data outside of your computer.
 
+## Reference papers
+
+- [BERT: Pre-training of Deep Bidirectional Transformers for Language Understanding (Devlin et al., NAACL 2019)](https://aclanthology.org/N19-1423/)
+- [RoBERTa: A Robustly Optimized BERT Pretraining Approach (Liu et al., arXiv preprint arXiv:1907.11692)](https://arxiv.org/abs/1907.11692)
+- [TimeLMs: Diachronic Language Models from Twitter (Loureiro et al., arXiv:2202.03829)](https://arxiv.org/abs/2202.03829)
+
 ## Installation
 
 ### macOS
