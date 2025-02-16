@@ -29,13 +29,19 @@ jobs:
       matrix:
         target: [ "Windows", "macOS" ]
         include:
-          - target: "Windows"
+          - target: "Windows-x64"
             output-format: "app"
             runs-on: "windows-latest"
 
-          - target: "macOS"
+          # Apple Silicon
+          - target: "macOS-arm64"
             output-format: "app"
-            runs-on: "macos-latest"
+            runs-on: "macos-14"
+
+          # Apple Intel
+          - target: "macOS-x64"
+            output-format: "app"
+            runs-on: "macos-13"
 
           # - target: "Ubuntu-24.04"
           #   platform: "Linux"
@@ -105,9 +111,9 @@ jobs:
         if: matrix.target != 'iOS'
         uses: actions/upload-artifact@v4
         with:
-          name: SwiftSentiment-${{ matrix.target }}
+          name: SwiftSentiment-${{ github.ref_name }}-${{ matrix.target }}
           path: |
-            dist/*${{ matrix.target == 'Windows' && '.msi' || '.dmg' }}
+            dist/*${{ contains(matrix.target, 'Windows') && '.msi' || '.dmg' }}
           if-no-files-found: error
 
       - name: Upload Log
@@ -135,5 +141,6 @@ jobs:
         uses: softprops/action-gh-release@v2
         with:
           files: |
-            artifacts/SwiftSentiment-Windows/**/*.msi
-            artifacts/SwiftSentiment-macOS/**/*.dmg
+            artifacts/SwiftSentiment-${{ github.ref_name }}-Windows-x64/**/*.msi
+            artifacts/SwiftSentiment-${{ github.ref_name }}-macOS-arm64/**/*.dmg
+            artifacts/SwiftSentiment-${{ github.ref_name }}-macOS-x64/**/*.dmg
