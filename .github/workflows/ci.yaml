@@ -27,7 +27,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        target: [ "Windows", "macOS" ]
+        target: [ "Windows-x64", "macOS-arm64", "macOS-x64" ]
         include:
           - target: "Windows-x64"
             output-format: "app"
