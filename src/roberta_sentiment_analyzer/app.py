@@ -29,8 +29,11 @@ class SwiftSentiment(toga.App):
             "text-classification", model=model, tokenizer=self.tokenizer
         )
 
+        # Create wrapper box
+        wrapper_box = toga.Box(style=Pack(direction=COLUMN))
+
         # Create main box
-        main_box = toga.Box(style=Pack(direction=COLUMN, padding=10))
+        main_box = toga.Box(style=Pack(direction=COLUMN, padding=10, flex=1))
 
         # Create title label
         title_label = toga.Label(
@@ -77,6 +80,12 @@ class SwiftSentiment(toga.App):
             headings=["Text", "Sentiment", "Confidence"], style=Pack(flex=1)
         )
 
+        # Create bottom status bar
+        status_bar_divider = toga.Divider()
+        status_label = toga.Label(
+            "SwiftSentiment v1.0.0", style=Pack(padding=(10), color="gray")
+        )
+
         # Add widgets to main box
         main_box.add(title_label)
         main_box.add(intro_label)
@@ -90,9 +99,14 @@ class SwiftSentiment(toga.App):
 
         main_box.add(self.results_table)
 
+        # Add main box and status bar to wrapper box
+        wrapper_box.add(main_box)
+        wrapper_box.add(status_bar_divider)
+        wrapper_box.add(status_label)
+
         # Create main window
         self.main_window = toga.MainWindow(title=self.formal_name, size=(800, 600))
-        self.main_window.content = main_box
+        self.main_window.content = wrapper_box
         self.main_window.show()
 
     async def select_file(self, widget):
