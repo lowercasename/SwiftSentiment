@@ -7,10 +7,9 @@ from toga.style.pack import COLUMN, ROW
 from transformers import AutoTokenizer, pipeline
 from optimum.onnxruntime import ORTModelForSequenceClassification
 import csv
-from pathlib import Path
 
 
-class RoBERTaSentimentAnalyzer(toga.App):
+class SwiftSentiment(toga.App):
     def startup(self):
         # Load the model on startup
         path_to_model_dir = os.path.abspath(
@@ -75,7 +74,7 @@ class RoBERTaSentimentAnalyzer(toga.App):
 
         # Create table
         self.results_table = toga.Table(
-            headings=["Text", "Sentiment", "Score"], style=Pack(flex=1)
+            headings=["Text", "Sentiment", "Confidence"], style=Pack(flex=1)
         )
 
         # Add widgets to main box
@@ -198,7 +197,11 @@ class RoBERTaSentimentAnalyzer(toga.App):
 
                     # Add to results: [original text, label, score]
                     self.results.append(
-                        [text, sentiment["label"], f"{sentiment['score']:.4f}"]
+                        [
+                            text,
+                            sentiment["label"],
+                            f"{sentiment['score'] * 100:.2f}%",
+                        ]
                     )
 
                     # Update UI every 10 rows
@@ -213,7 +216,7 @@ class RoBERTaSentimentAnalyzer(toga.App):
                 [
                     "Overall Transcript",
                     overall_sentiment["label"],
-                    f"{overall_sentiment['score']:.4f}",
+                    f"{overall_sentiment['score'] * 100:.2f}%",
                 ]
             )
 
@@ -249,7 +252,7 @@ class RoBERTaSentimentAnalyzer(toga.App):
                 # Write results to CSV
                 with open(save_path, "w", newline="") as outfile:
                     writer = csv.writer(outfile)
-                    writer.writerow(["Text", "Sentiment", "Score"])  # Header
+                    writer.writerow(["Text", "Sentiment", "Confidence"])
                     writer.writerows(self.results)
 
                 self.main_window.info_dialog(
@@ -261,4 +264,4 @@ class RoBERTaSentimentAnalyzer(toga.App):
 
 
 def main():
-    return RoBERTaSentimentAnalyzer()
+    return SwiftSentiment()
